@@ -1,0 +1,98 @@
+/* ECHO: Institutional Memory & Decision Intelligence Engine Styles */
+
+/* Active Sidebar Navigation Pill */
+.nav-item.active {
+    background-color: #EEF2FF !important;
+    color: #4F46E5 !important;
+    font-weight: 800 !important;
+    border-radius: 1rem !important;
+}
+
+.nav-item.active i {
+    color: #4F46E5 !important;
+}
+
+/* Upload Dropzone Drag State */
+#upload-dropzone.drag-active {
+    border-color: #3B82F6 !important;
+    background-color: #EFF6FF !important;
+    transform: scale(1.005);
+}
+
+/* Dynamic D3 Graph Node Styles */
+.node-circle {
+    stroke-width: 2.5px;
+    cursor: pointer;
+    transition: r 0.2s ease, stroke-width 0.2s ease;
+}
+
+.node-circle:hover {
+    r: 18px !important;
+    stroke: #ffffff !important;
+    stroke-width: 3.5px !important;
+}
+
+.node-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    fill: #e2e8f0;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.link-line {
+    stroke: #334155;
+    stroke-opacity: 0.6;
+    stroke-width: 1.5px;
+}
+
+/* Timeline Vertical Connector Line */
+.timeline-item {
+    position: relative;
+}
+
+.timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 17px;
+    bottom: -16px;
+    width: 2px;
+    background-color: #E2E8F0;
+}
+
+/* Toast Animation */
+.toast-slide-in {
+    animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}

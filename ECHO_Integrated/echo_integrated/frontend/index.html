@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F0F4F9]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECHO: Institutional Memory & Decision Intelligence Engine</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            50: '#EEF2FF',
+                            100: '#E0E7FF',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                            900: '#312E81',
+                        },
+                        brand: {
+                            navy: '#0F172A',
+                            accent: '#4F46E5',
+                            bg: '#F0F4F9',
+                            teal: '#10B981',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- D3.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="h-full font-sans text-slate-900 bg-[#F0F4F9] antialiased flex flex-col overflow-hidden">
+
+    <div id="app-wrapper" class="flex h-screen w-screen overflow-hidden">
+
+        <!-- Left Navigation Sidebar -->
+        <aside id="sidebar" class="w-72 bg-white border-r border-slate-200/70 flex flex-col z-30 shrink-0 shadow-sm transition-all duration-300 relative">
+            
+            <!-- BRANDING LOGO: Echoing Wave + Leaf Intelligence Motif -->
+            <div class="p-6 pb-4 border-b border-slate-100 space-y-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-teal-400 p-0.5 shadow-md stroke-indigo-500/20 shrink-0">
+                        <div class="w-full h-full bg-[#0F172A] rounded-[14px] flex items-center justify-center">
+                            <svg class="w-6 h-6 text-indigo-400" viewBox="0 0 32 32" fill="none">
+                                <path d="M4 16 C4 9 9 4 16 4" stroke="#6366F1" stroke-width="2.5" opacity="0.6"/>
+                                <path d="M8 16 C8 11.5 11.5 8 16 8" stroke="#38BDF8" stroke-width="2" opacity="0.8"/>
+                                <path d="M16 8 C22 8 26 12 26 18 C26 24 20 26 16 26 C12 26 10 22 10 18 Z" fill="#10B981" opacity="0.85"/>
+                                <path d="M16 10 L16 24 M16 14 L21 12 M16 18 L22 17 M16 20 L20 22" stroke="#FFFFFF" stroke-width="1.75"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="font-black text-2xl tracking-tight text-[#0F172A] leading-none">ECHO</h1>
+                        <span class="text-[10px] font-extrabold tracking-wider text-indigo-600 uppercase">Intelligence Lab</span>
+                    </div>
+                </div>
+                <p class="text-[10px] font-semibold text-slate-400 leading-tight">
+                    Institutional Memory & Decision Intelligence Engine
+                </p>
+            </div>
+
+            <!-- Sidebar Navigation Menu Items -->
+            <nav class="flex-1 px-4 py-4 space-y-1.5 overflow-y-auto">
+                <a href="#home" data-tab="home" class="nav-item flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all group">
+                    <i data-lucide="home" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600"></i>
+                    <span>Home</span>
+                </a>
+
+                <a href="#search" data-tab="search" class="nav-item flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all group">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600"></i>
+                    <span>Search</span>
+                </a>
+
+                <a href="#results" data-tab="results" class="nav-item flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all group">
+                    <i data-lucide="file-text" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600"></i>
+                    <span>Results</span>
+                    <span id="nav-count-badge" class="ml-auto text-xs bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-full font-extrabold">3</span>
+                </a>
+
+                <a href="#graph" data-tab="graph" class="nav-item flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all group">
+                    <i data-lucide="share-2" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600"></i>
+                    <span>Knowledge Graph</span>
+                </a>
+
+                <a href="#profile" data-tab="profile" class="nav-item flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all group">
+                    <i data-lucide="user" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600"></i>
+                    <span>My Profile</span>
+                </a>
+
+                <a href="#settings" data-tab="settings" class="nav-item flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all group">
+                    <i data-lucide="settings" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden min-w-0 bg-[#F0F4F9]">
+
+            <!-- TOP HEADER BAR -->
+            <header class="h-20 px-8 flex items-center justify-between z-20 shrink-0 border-b border-slate-200/50 bg-[#F0F4F9]/80 backdrop-blur-md">
+                <div>
+                    <h2 id="page-title" class="text-xl font-black text-[#0F172A] leading-tight">Home</h2>
+                    <p id="page-subtitle" class="text-xs text-slate-500 font-medium">Institutional Memory & Decision Intelligence Engine</p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Notification Bell -->
+                    <div class="relative">
+                        <button id="notification-btn" class="p-2.5 text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 rounded-full shadow-sm border border-slate-200/80 transition-all relative">
+                            <i data-lucide="bell" class="w-5 h-5"></i>
+                            <span id="notif-badge-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full ring-2 ring-white">3</span>
+                        </button>
+
+                        <div id="notification-panel" class="hidden absolute right-0 mt-3 w-96 bg-white rounded-3xl shadow-2xl border border-slate-200 p-5 z-50 space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-extrabold text-sm text-[#0F172A]">Notifications</h4>
+                                    <span id="notif-header-badge" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-50 text-indigo-600">3 Unread</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-[11px]">
+                                    <button id="btn-mark-all-read" class="text-indigo-600 hover:underline font-bold">Mark all read</button>
+                                    <span class="text-slate-300">•</span>
+                                    <button id="btn-clear-notifs" class="text-slate-400 hover:text-slate-600 font-semibold">Clear</button>
+                                </div>
+                            </div>
+                            <div id="notif-items-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <div id="profile-menu-trigger" class="flex items-center gap-3 p-1.5 pr-3 bg-white hover:bg-slate-50 rounded-full border border-slate-200/80 shadow-sm cursor-pointer transition-all">
+                            <div class="w-9 h-9 rounded-full bg-[#0F172A] text-white font-black flex items-center justify-center text-xs relative">
+                                AM
+                                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                            </div>
+                            <div class="hidden sm:block text-left">
+                                <div class="text-xs font-black text-[#0F172A] leading-none">Dr. Alex Mercer</div>
+                                <div class="text-[10px] font-semibold text-slate-400 mt-0.5">Decision Intelligence Analyst</div>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-2xl border border-slate-200 p-3 z-50 space-y-1">
+                            <div class="p-3 border-b border-slate-100 mb-1">
+                                <div class="font-extrabold text-sm text-[#0F172A]">Dr. Alex Mercer</div>
+                                <div class="text-xs text-slate-400 font-medium">alex.mercer@echo-intelligence.io</div>
+                            </div>
+                            <a href="#profile" data-tab="profile" class="profile-dropdown-item flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-all">
+                                <i data-lucide="user" class="w-4 h-4 text-slate-400"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <a href="#settings" data-tab="settings" class="profile-dropdown-item flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-all">
+                                <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i>
+                                <span>Account Settings</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <main id="views-container" class="flex-1 overflow-y-auto px-8 pb-8 pt-2 min-w-0">
+
+                <!-- TAB 1: HOME VIEW -->
+                <div id="view-home" class="view-panel space-y-6">
+                    <div class="bg-gradient-to-r from-[#EBF2FE] via-[#F4F0FF] to-[#EBF2FE] rounded-3xl p-8 border border-indigo-100/80 shadow-sm relative overflow-hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-indigo-200/60 text-indigo-700 text-xs font-bold shadow-2xs">
+                                    <span>Institutional Memory & Decision Intelligence Engine</span>
+                                </div>
+                                <h1 class="text-4xl sm:text-5xl font-black text-[#0F172A] tracking-tight">ECHO</h1>
+                                <p class="text-lg sm:text-xl font-bold text-[#0F172A] leading-snug">From Documents to Decisions — Smarter, Faster, Together.</p>
+                                <p class="text-sm text-[#64748B] font-medium max-w-lg leading-relaxed">Upload, search and explore information with the power of AI.</p>
+                            </div>
+
+                            <div class="lg:col-span-5 flex justify-center">
+                                <div class="relative w-full max-w-md h-52 flex items-center justify-center">
+                                    <svg class="w-full h-full" viewBox="0 0 360 200" fill="none">
+                                        <path d="M 85 100 Q 150 60 180 100 T 275 100" stroke="#6366F1" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.7"/>
+                                        <g transform="translate(30, 50)">
+                                            <rect width="65" height="85" rx="10" fill="#FFFFFF" filter="drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.08))"/>
+                                            <rect x="12" y="15" width="30" height="6" rx="3" fill="#4F46E5"/>
+                                            <rect x="12" y="28" width="40" height="4" rx="2" fill="#CBD5E1"/>
+                                        </g>
+                                        <g transform="translate(150, 70)">
+                                            <circle cx="30" cy="30" r="30" fill="#4F46E5" filter="drop-shadow(0px 10px 20px rgba(79, 70, 229, 0.35))"/>
+                                            <text x="30" y="36" text-anchor="middle" fill="#FFFFFF" font-weight="900" font-size="16">AI</text>
+                                        </g>
+                                        <g transform="translate(245, 45)">
+                                            <rect width="85" height="95" rx="12" fill="#FFFFFF" filter="drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.08))"/>
+                                            <circle cx="25" cy="30" r="8" fill="#3B82F6"/>
+                                            <circle cx="60" cy="25" r="9" fill="#8B5CF6"/>
+                                            <circle cx="45" cy="65" r="7.5" fill="#10B981"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UPLOAD CONTAINER -->
+                    <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm">
+                        <div id="upload-dropzone" class="border-2 border-dashed border-indigo-200 hover:border-indigo-500 bg-[#F8FAFC] hover:bg-indigo-50/40 rounded-2xl p-10 text-center transition-all cursor-pointer group relative">
+                            <input type="file" id="file-input" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.txt,.md">
+                            <div class="w-16 h-16 rounded-2xl bg-white shadow-sm border border-indigo-100 flex items-center justify-center mx-auto mb-4 text-indigo-600 group-hover:scale-110 transition-transform">
+                                <i data-lucide="cloud-upload" class="w-9 h-9 stroke-[1.75]"></i>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-[#0F172A] mb-1">Upload Your Document</h3>
+                            <p class="text-xs text-[#64748B] font-medium mb-6">Drag & drop your file here or click to browse</p>
+                            <button type="button" id="trigger-file-select" class="bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold text-xs px-7 py-3 rounded-full transition-all shadow-md inline-flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                                <span>Choose File -&gt;</span>
+                            </button>
+                            <p class="text-[11px] text-slate-400 font-medium mt-6">Supports PDF, Images (JPG, PNG)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: SEARCH VIEW -->
+                <div id="view-search" class="view-panel hidden space-y-6">
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                        <h3 class="text-base font-extrabold text-[#0F172A]">AI Vector Semantic Search</h3>
+                        <div class="relative">
+                            <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="search-input" placeholder="Search institutional memory..." class="w-full pl-12 pr-28 py-3.5 bg-[#F8FAFC] border border-slate-200 rounded-2xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button id="search-submit-btn" class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-bold px-4 py-2 rounded-xl">Search</button>
+                        </div>
+                    </div>
+                    <div id="search-results-list" class="space-y-3"></div>
+                </div>
+
+                <!-- TAB 3: RESULTS VIEW -->
+                <div id="view-results" class="view-panel hidden space-y-6">
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                        <h3 class="text-base font-extrabold text-[#0F172A]">Document Repository Data Store</h3>
+                        <div class="overflow-x-auto rounded-2xl border border-slate-200/80">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
+                                        <th class="py-3.5 px-4">Document Name</th>
+                                        <th class="py-3.5 px-4">Date & Time</th>
+                                        <th class="py-3.5 px-4">Summary</th>
+                                        <th class="py-3.5 px-4">Entities</th>
+                                        <th class="py-3.5 px-4">Status</th>
+                                        <th class="py-3.5 px-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-table-body" class="divide-y divide-slate-100 text-xs font-medium"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: KNOWLEDGE GRAPH VIEW -->
+                <div id="view-graph" class="view-panel hidden space-y-4 h-full flex flex-col">
+                    <div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-sm flex items-center justify-between shrink-0">
+                        <h3 class="text-sm font-extrabold text-[#0F172A]">Knowledge Graph Topology</h3>
+                        <div class="flex items-center gap-2">
+                            <button id="graph-zoom-in" class="p-2 bg-slate-100 rounded-xl"><i data-lucide="zoom-in" class="w-4 h-4"></i></button>
+                            <button id="graph-zoom-out" class="p-2 bg-slate-100 rounded-xl"><i data-lucide="zoom-out" class="w-4 h-4"></i></button>
+                            <button id="graph-reset-view" class="p-2 bg-slate-100 rounded-xl"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                    <div class="relative flex-1 bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 min-h-[450px]">
+                        <svg id="knowledge-graph-svg" class="w-full h-full cursor-grab active:cursor-grabbing"></svg>
+                    </div>
+                </div>
+
+                <!-- TAB 5: DEDICATED PROFILE VIEW -->
+                <div id="view-profile" class="view-panel hidden space-y-6">
+                    <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden">
+                        <div class="w-24 h-24 rounded-full bg-[#0F172A] text-white font-black text-3xl flex items-center justify-center shadow-xl border-4 border-indigo-50 shrink-0 relative">
+                            AM
+                            <span class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 ring-4 ring-white"></span>
+                        </div>
+                        <div class="space-y-2 text-center md:text-left flex-1">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                                <div>
+                                    <h3 class="text-2xl font-black text-[#0F172A]">Dr. Alex Mercer</h3>
+                                    <p class="text-sm font-bold text-indigo-600">Decision Intelligence Analyst</p>
+                                </div>
+                                <span class="px-3.5 py-1 rounded-full text-xs font-extrabold bg-teal-50 text-teal-700 border border-teal-200/60 inline-block self-center md:self-start">ECHO Intelligence Labs</span>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-semibold text-slate-500 pt-1">
+                                <span class="flex items-center gap-1.5"><i data-lucide="mail" class="w-4 h-4 text-slate-400"></i> alex.mercer@echo-intelligence.io</span>
+                                <span>•</span>
+                                <span class="flex items-center gap-1.5"><i data-lucide="building" class="w-4 h-4 text-slate-400"></i> Strategic Analytics Division</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black">
+                                <i data-lucide="file-up" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <div id="profile-stat-uploads" class="text-3xl font-black text-[#0F172A]">3</div>
+                                <div class="text-xs text-slate-500 font-bold">Total Uploaded Docs</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-black">
+                                <i data-lucide="share-2" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <div id="profile-stat-entities" class="text-3xl font-black text-[#0F172A]">18</div>
+                                <div class="text-xs text-slate-500 font-bold">Extracted Entities</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-black">
+                                <i data-lucide="git-commit" class="w-7 h-7"></i>
+                            </div>
+                            <div>
+                                <div id="profile-stat-nodes" class="text-3xl font-black text-[#0F172A]">21</div>
+                                <div class="text-xs text-slate-500 font-bold">Knowledge Graph Nodes</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                        <h4 class="text-base font-extrabold text-[#0F172A] flex items-center gap-2">
+                            <i data-lucide="activity" class="w-5 h-5 text-indigo-600"></i> Recent Activity Log
+                        </h4>
+                        <div id="profile-timeline-feed" class="space-y-4 pt-1"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 6: SETTINGS VIEW -->
+                <div id="view-settings" class="view-panel hidden space-y-6">
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                        <h3 class="text-base font-extrabold text-[#0F172A]">Settings & Preferences</h3>
+                        <div class="pt-2 space-y-3">
+                            <button id="btn-import-sample" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-bold px-4 py-2.5 rounded-xl transition-all">Reset Sample Dataset</button>
+                            <button id="btn-clear-history" class="bg-red-50 text-red-600 hover:bg-red-100 text-xs font-bold px-4 py-2.5 rounded-xl transition-all ml-2">Clear Local Data</button>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Upload Processing Modal -->
+    <div id="upload-modal" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-5">
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-2">
+                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
+                </div>
+                <h3 id="upload-modal-title" class="text-base font-extrabold text-[#0F172A]">Processing Document</h3>
+                <p id="upload-modal-file-name" class="text-xs text-slate-500 font-semibold truncate max-w-xs mx-auto">filename.pdf</p>
+            </div>
+
+            <div class="space-y-1.5">
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="upload-progress-bar" class="bg-[#3B82F6] h-full w-[10%] rounded-full transition-all duration-300"></div>
+                </div>
+                <div class="flex justify-between text-[11px] font-bold text-slate-400">
+                    <span id="upload-stage-text">Step 1 of 3</span>
+                    <span id="upload-percent-text">10%</span>
+                </div>
+            </div>
+
+            <div id="upload-completed-actions" class="hidden flex gap-3 pt-2">
+                <button id="modal-btn-view-results" class="flex-1 bg-[#3B82F6] text-white font-bold text-xs py-2.5 rounded-xl">View Results</button>
+                <button id="modal-btn-view-graph" class="flex-1 bg-slate-100 text-slate-800 font-bold text-xs py-2.5 rounded-xl">View Graph</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+    <!-- API Layer Script Included Before Main App Script -->
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
